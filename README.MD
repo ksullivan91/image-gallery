@@ -24,7 +24,7 @@ npm install
 To use <image-gallery>, follow these steps:
 
 ```bash
-npm start       # To start the development server
+npm dev       # To start the development server
 
 npm run build   # To build the project
 ```
