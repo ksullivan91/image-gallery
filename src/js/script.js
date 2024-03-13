@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     for (let index = 0; index < totalImages; index++) {
         const url = imageUrls[index % imageUrls.length];
-        console.log(url);
         const col = document.createElement('div');
         col.className = 'col-6 col-md-4 col-lg-3 image';
         col.innerHTML = `
