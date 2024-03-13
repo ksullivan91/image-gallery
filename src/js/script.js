@@ -27,17 +27,16 @@ document.addEventListener('DOMContentLoaded', function () {
         gallery.appendChild(col);
     }
 
-  let observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-          if (entry.isIntersecting) {
-              const image = entry.target;
-              image.style.backgroundImage = `url('${image.getAttribute('data-src')}')`;
-              observer.unobserve(image);
-          }
-      });
-  }, {rootMargin: "0px 0px 50px 0px"});
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const image = entry.target;
+                const src = image.getAttribute('data-src');
+                image.style.backgroundImage = `url('${src}')`;
+                observer.unobserve(image);
+            }
+        });
+    }, { rootMargin: "0px 0px 50px 0px" });
 
-  document.querySelectorAll('.image-background').forEach(img => {
-      observer.observe(img);
-  });
+    document.querySelectorAll('.image-background').forEach(img => observer.observe(img));
 });
