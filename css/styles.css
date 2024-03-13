@@ -2,14 +2,17 @@ body {
   background: #eff1f5;
 }
 
-.image-checkbox {
+.image {
+  position: relative;
+}
+.image .image-checkbox {
   display: block;
   position: relative;
   width: 100%;
   height: 100%;
   cursor: pointer;
 }
-.image-checkbox input[type=checkbox] {
+.image .image-checkbox input[type=checkbox] {
   position: absolute;
   opacity: 0;
   width: 0;
@@ -17,7 +20,7 @@ body {
   margin: 0;
   padding: 0;
 }
-.image-checkbox .image-background {
+.image .image-checkbox .image-background {
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
   display: block;
   width: 100%;
@@ -25,13 +28,14 @@ body {
   min-height: 288px;
   max-height: 288px;
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-repeat: no-repeat;
   border: 4px solid white;
   border-radius: 1px;
   transition: border-color 0.15s ease-in-out;
+  overflow: hidden;
 }
-.image-checkbox .image-background::after {
+.image .image-checkbox .image-background::after {
   content: "";
   position: absolute;
   top: 12px;
@@ -43,13 +47,13 @@ body {
   border-image: url("https://res.cloudinary.com/dcw3kjyjc/image/upload/v1710338706/imageedit_6_5570842697_qmxqzf.png") 2 round;
   transition: border-color 0.15s ease-in-out, transform 0.15s ease;
 }
-.image-checkbox:focus-within {
+.image .image-checkbox:focus-within {
   outline: 2px solid #f60062;
 }
-.image-checkbox:hover .image-background::after {
+.image .image-checkbox:hover .image-background::after {
   transform: scale(1.2);
 }
-.image-checkbox input:checked + .image-background {
+.image .image-checkbox input:checked + .image-background {
   border-color: #f60062;
   outline: none;
 }
