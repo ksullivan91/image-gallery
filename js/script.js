@@ -3,4 +3,4 @@ document.addEventListener("DOMContentLoaded",function(){var imageUrls=["https://
                 <input type="checkbox" id="checkbox-${index}" tabindex="0" />
                 <div class="image-background" data-src="${url}"></div>
             </label>
-        `,gallery.appendChild(col)}let observer=new IntersectionObserver((entries,observer)=>{entries.forEach(entry=>{entry.isIntersecting&&((entry=entry.target).style.backgroundImage=`url('${entry.getAttribute("data-src")}')`,observer.unobserve(entry))})},{rootMargin:"0px 0px 50px 0px"});document.querySelectorAll(".image-background").forEach(img=>{observer.observe(img)})});
+        `,gallery.appendChild(col)}const observer=new IntersectionObserver((entries,observer)=>{entries.forEach(entry=>{var src;entry.isIntersecting&&(src=(entry=entry.target).getAttribute("data-src"),entry.style.backgroundImage=`url('${src}')`,observer.unobserve(entry))})},{rootMargin:"0px 0px 50px 0px"});document.querySelectorAll(".image-background").forEach(img=>observer.observe(img))});
