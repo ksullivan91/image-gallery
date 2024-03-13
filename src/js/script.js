@@ -17,11 +17,11 @@ document.addEventListener('DOMContentLoaded', function () {
     for (let index = 0; index < totalImages; index++) {
         const url = imageUrls[index % imageUrls.length];
         const col = document.createElement('div');
-        col.className = 'col-6 col-md-4 col-lg-3 image';
+        col.className = 'image';
         col.innerHTML = `
             <label class="image-checkbox" for="checkbox-${index}">
                 <input type="checkbox" id="checkbox-${index}" tabindex="${0}" />
-                <div class="image-background" data-src="${url}"></div>
+                <div class="image-background img-thumbnail" data-src="${url}"></div>
             </label>
         `;
         gallery.appendChild(col);
