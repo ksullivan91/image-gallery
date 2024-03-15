@@ -35,8 +35,7 @@ function createGalleryItemHtml(index, imageUrl) {
   return `
       <div class="image">
         <label class="image-checkbox" for="checkbox-${index}">
-          <input type="checkbox" id="checkbox-${index}" tabindex="0" />
-          <div class="image-background img-thumbnail" data-src="${imageUrl}"></div>
+          <input type="checkbox" id="checkbox-${index}" class="image-background img-thumbnail" data-src="${imageUrl}" />
         </label>
       </div>
     `;
@@ -60,7 +59,7 @@ function handleIntersection(entries, observer) {
 
 function loadImageBackground(imageElement) {
   const imageUrl = imageElement.getAttribute("data-src");
-  imageElement.style.backgroundImage = `url('${imageUrl}')`;
+  imageElement.style.setProperty("--image-url", `url(${imageUrl})`);
 }
 
 function adjustImageHeight(imageElement) {

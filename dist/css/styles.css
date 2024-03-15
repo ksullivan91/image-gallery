@@ -9,54 +9,54 @@ body {
   display: block;
   position: relative;
   cursor: pointer;
-}
-.image .image-checkbox input[type=checkbox]:checked + .image-background {
-  border-color: #f60062;
-  outline: none;
+  z-index: 1;
 }
 .image .image-checkbox .image-background {
   width: 100%;
   height: var(--image-height, 288px);
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  border: 4px solid white;
-  border-radius: 1px;
   transition-property: border-color;
   transition-duration: 0.2s;
   transition-timing-function: ease-in-out;
   transition-delay: 0s;
 }
-.image .image-checkbox .image-background::after {
+.image .image-checkbox .image-background:checked {
+  outline: 6px solid #f60062;
+}
+.image .image-checkbox .image-background:focus-within {
+  outline-color: #f60062;
+}
+.image .image-checkbox .image-background::before {
   content: "";
   position: absolute;
   top: 12px;
   left: 12px;
   width: 16px;
   height: 16px;
-  border: 2px dashed #f60062;
   border-radius: 4px;
+  border: 2px dashed #f60062;
   border-image: url("https://res.cloudinary.com/dcw3kjyjc/image/upload/v1710338706/imageedit_6_5570842697_qmxqzf.png") 2 round;
   transition-property: border-color;
   transition-duration: 0.15s;
   transition-timing-function: ease-in-out;
   transition-delay: transform;
+  z-index: 5;
 }
-.image .image-checkbox:focus-within {
-  outline: 2px solid #f60062;
-}
-.image .image-checkbox:hover .image-background::after {
-  transform: scale(1.2);
-}
-
-.image .image-checkbox input[type=checkbox] {
+.image .image-checkbox .image-background::after {
+  content: "";
+  width: 100%;
+  background-image: var(--image-url, "");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: var(--image-height, 288px);
+  border: 4px solid white;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 1px;
   position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  margin: 0;
-  padding: 0;
+  top: 0px;
+  right: 0;
+  left: 0;
+  bottom: 0;
 }
 
 /*# sourceMappingURL=styles.css.map */
