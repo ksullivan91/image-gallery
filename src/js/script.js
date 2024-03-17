@@ -12,13 +12,16 @@ const imageUrls = [
 
 let galleryElement;
 let imageElements;
+let container;
 let prevContainerWidth = 0;
 
 function populateGallery(
   imageUrls,
   totalImages = imageUrls.length,
   connectionSpeed,
+  containerElement,
 ) {
+  container = containerElement;
   galleryElement = document.querySelector("#imageGallery");
   let galleryInnerHTML = "";
   for (let i = 0; i < totalImages; i++) {
@@ -86,8 +89,6 @@ function loadImageBackground(imageElement) {
 }
 
 function initializeImageResizeObserver() {
-  const container = document.querySelector(".container");
-
   const resizeObserver = new ResizeObserver(() => {
     const newContainerWidth = container.getBoundingClientRect().width;
     if (newContainerWidth !== prevContainerWidth) {
@@ -102,6 +103,7 @@ function initializeImageResizeObserver() {
 function setImageHeightVariable() {
   const imageElement = imageElements[0];
   if (imageElement) {
+    console.log('changing width');
     const width = imageElement.getBoundingClientRect().width;
     galleryElement.style.setProperty("--image-height", `${width}px`);
   }
@@ -111,5 +113,5 @@ document.addEventListener("DOMContentLoaded", () => {
   const connectionSpeed = navigator.connection
     ? navigator.connection.effectiveType
     : "4g";
-  populateGallery(imageUrls, 20, connectionSpeed);
+  populateGallery(imageUrls, 20, connectionSpeed, document.querySelector(".container-fluid"));
 });
