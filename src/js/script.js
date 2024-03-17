@@ -50,16 +50,16 @@ function getDynamicThresholdAndRootMargin(connectionSpeed) {
   let rootMargin = "50px";
 
   switch (connectionSpeed) {
-    case 'slow-2g':
-    case '2g':
+    case "slow-2g":
+    case "2g":
       threshold = 0.001;
       rootMargin = "200px";
       break;
-    case '3g':
+    case "3g":
       threshold = 0.01;
       rootMargin = "100px";
       break;
-    case '4g':
+    case "4g":
     default:
       threshold = 0.1;
       rootMargin = "50px";
@@ -112,5 +112,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const connectionSpeed = navigator.connection
     ? navigator.connection.effectiveType
     : "4g";
-  populateGallery(imageUrls, 20, connectionSpeed, document.querySelector(".container-fluid"));
+
+  populateGallery(
+    imageUrls,
+    1000,
+    connectionSpeed,
+    document.querySelector(".container-fluid"),
+  );
 });
