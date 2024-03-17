@@ -103,7 +103,6 @@ function initializeImageResizeObserver() {
 function setImageHeightVariable() {
   const imageElement = imageElements[0];
   if (imageElement) {
-    console.log('changing width');
     const width = imageElement.getBoundingClientRect().width;
     galleryElement.style.setProperty("--image-height", `${width}px`);
   }
