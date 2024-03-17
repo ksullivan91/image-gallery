@@ -11,16 +11,13 @@ module.exports = function (grunt) {
     },
 
     uglify: {
-      options: {
-        mangle: false,
-      },
+      options: {},
       my_target: {
         files: {
           "dist/js/script.js": ["src/js/script.js"],
         },
       },
     },
-
     copy: {
       main: {
         expand: true,
@@ -30,10 +27,24 @@ module.exports = function (grunt) {
       },
     },
 
+    cssmin: {
+      target: {
+        files: [
+          {
+            expand: true,
+            cwd: "dist/css",
+            src: ["*.css", "!*.min.css"],
+            dest: "dist/css",
+            ext: ".min.css",
+          },
+        ],
+      },
+    },
+
     watch: {
       scripts: {
         files: ["src/js/*.js", "src/scss/*.scss", "src/*.html"],
-        tasks: ["uglify", "sass", "copy"],
+        tasks: ["uglify", "sass", "copy", "cssmin"],
         options: {
           spawn: false,
         },
@@ -45,7 +56,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-sass");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-watch");
+  grunt.loadNpmTasks("grunt-contrib-cssmin");
 
-  grunt.registerTask("default", ["uglify", "sass", "copy", "watch"]);
-  grunt.registerTask("build", ["uglify", "sass", "copy"]);
+  grunt.registerTask("default", ["uglify", "sass", "copy", "cssmin", "watch"]);
+  grunt.registerTask("build", ["uglify", "sass", "copy", "cssmin"]);
 };

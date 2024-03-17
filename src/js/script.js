@@ -1,4 +1,3 @@
-document.addEventListener("DOMContentLoaded", initializeGallery);
 const imageUrls = [
   "https://acre-image-collections.s3.amazonaws.com/image-6578722caea701702392364_medium.jpg",
   "https://acre-images.s3.amazonaws.com/image-5ac62b9e561041522936734_medium.jpeg",
@@ -11,51 +10,74 @@ const imageUrls = [
   "https://acre-images.s3.amazonaws.com/image-5b01cdf4b2e9a1526844916.jpg",
 ];
 
+let galleryElement;
 let imageElements;
+let prevContainerWidth = 0;
 
-function initializeGallery() {
-  const galleryElement = document.getElementById("imageGallery");
-  populateGallery(galleryElement);
-  adjustImageHeightsOnResize();
-  initializeImageObserver();
-}
-
-function populateGallery(galleryElement) {
-  const totalImages = 20;
-
-  for (let index = 0; index < totalImages; index++) {
-    const imageUrl = imageUrls[index % imageUrls.length];
-    const galleryItemHtml = createGalleryItemHtml(index, imageUrl);
-    galleryElement.innerHTML += galleryItemHtml;
+function populateGallery(
+  imageUrls,
+  totalImages = imageUrls.length,
+  connectionSpeed,
+) {
+  galleryElement = document.querySelector("#imageGallery");
+  let galleryInnerHTML = "";
+  for (let i = 0; i < totalImages; i++) {
+    let imageUrl = imageUrls[i % imageUrls.length];
+    galleryInnerHTML += createGalleryItemHtml(i, imageUrl);
   }
-  imageElements = document.querySelectorAll(".image-background");
+  galleryElement.innerHTML = galleryInnerHTML;
+
+  initializeImageLoadObserver(connectionSpeed);
+  initializeImageResizeObserver();
 }
 
 function createGalleryItemHtml(index, imageUrl) {
   return `
-      <div class="image">
-        <label class="image-checkbox" for="checkbox-${index}">
-          <input type="checkbox" id="checkbox-${index}" tabindex="0" />
-          <div class="image-background img-thumbnail" data-src="${imageUrl}"></div>
-        </label>
-      </div>
-    `;
+    <div class="image" role="presentation">
+      <label class="image-checkbox" for="checkbox-${index}">
+        <input type="checkbox" id="checkbox-${index}" tabindex="0" />
+        <div class="image-background img-thumbnail" data-src="${imageUrl}" role="img" aria-label="Gallery Image ${index + 1}"></div>
+      </label>
+    </div>
+  `;
 }
 
-function initializeImageObserver() {
-  const observer = new IntersectionObserver(handleIntersection);
+function getDynamicThresholdAndRootMargin(connectionSpeed) {
+  let threshold = 0.01;
+  let rootMargin = "50px";
+
+  switch (connectionSpeed) {
+    case 'slow-2g':
+    case '2g':
+      threshold = 0.001;
+      rootMargin = "200px";
+      break;
+    case '3g':
+      threshold = 0.01;
+      rootMargin = "100px";
+      break;
+    case '4g':
+    default:
+      threshold = 0.1;
+      rootMargin = "50px";
+      break;
+  }
+
+  return { threshold, rootMargin };
+}
+
+function initializeImageLoadObserver(connectionSpeed) {
+  imageElements = galleryElement.querySelectorAll(".image-background");
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries
+      .filter((entry) => entry.isIntersecting)
+      .forEach((entry) => {
+        loadImageBackground(entry.target);
+        observer.unobserve(entry.target);
+      });
+  }, getDynamicThresholdAndRootMargin(connectionSpeed));
+
   imageElements.forEach((image) => observer.observe(image));
-}
-
-function handleIntersection(entries, observer) {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      const imageElement = entry.target;
-      loadImageBackground(imageElement);
-      adjustImageHeight(imageElement);
-      observer.unobserve(imageElement);
-    }
-  });
 }
 
 function loadImageBackground(imageElement) {
@@ -63,13 +85,31 @@ function loadImageBackground(imageElement) {
   imageElement.style.backgroundImage = `url('${imageUrl}')`;
 }
 
-function adjustImageHeight(imageElement) {
-  const width = imageElement.getBoundingClientRect().width;
-  imageElement.style.setProperty("--image-height", `${width}px`);
+function initializeImageResizeObserver() {
+  const container = document.querySelector(".container");
+
+  const resizeObserver = new ResizeObserver(() => {
+    const newContainerWidth = container.getBoundingClientRect().width;
+    if (newContainerWidth !== prevContainerWidth) {
+      setImageHeightVariable(container);
+      prevContainerWidth = newContainerWidth;
+    }
+  });
+
+  resizeObserver.observe(container);
 }
 
-function adjustImageHeightsOnResize() {
-  window.addEventListener("resize", () =>
-    imageElements.forEach(adjustImageHeight),
-  );
+function setImageHeightVariable() {
+  const imageElement = imageElements[0];
+  if (imageElement) {
+    const width = imageElement.getBoundingClientRect().width;
+    galleryElement.style.setProperty("--image-height", `${width}px`);
+  }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const connectionSpeed = navigator.connection
+    ? navigator.connection.effectiveType
+    : "4g";
+  populateGallery(imageUrls, 20, connectionSpeed);
+});
